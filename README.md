@@ -1,2 +1,2 @@
 # PlutusAlarmV.2
- A simple alarm - ;)
+ A simple alarm for a school project- ;)
