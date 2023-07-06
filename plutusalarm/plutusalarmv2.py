@@ -85,7 +85,7 @@ secTime = Entry(clockui, textvariable = sec, bg ="white",  bd = 2, width = 10).p
 #buttons of the user interface
 submit = Button(clockui, text = "Activate Alarm", fg = "black", width = 20, pady = 5, font = ("Helvetica", "10", "bold"), command = actual_time).place(x = 330, y = 350)
 
-#githublink = Button(clockui, image = gitimage, fg = "black", width = 10, pady = 5, command = openweb ).place(x = 650, y = 350)
+githublink = Button(clockui, text = "Github", font = ("Helvetica", "10", "bold"), fg = "black", width = 10, pady = 5, command = openweb ).place(x = 650, y = 350)
 
 closealarm = Button(clockui, text = "Exit App", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = closeclockui ).place(x = 50, y = 350)
 
