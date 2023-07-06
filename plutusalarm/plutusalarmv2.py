@@ -1,3 +1,5 @@
+#Nathan Attoh - University of Ghana
+
 from tkinter import *
 from PIL import Image, ImageTk
 import os
