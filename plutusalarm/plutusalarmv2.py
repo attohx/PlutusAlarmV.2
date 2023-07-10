@@ -2,27 +2,17 @@
 
 from tkinter import *
 from PIL import Image, ImageTk
-import os
 import datetime
 import time
 import winsound
 import webbrowser
 
-#current path of the code
-currentpath = os.path.dirname(__file__)
-
-#joins resource folder path to the current path
-resourcefolder = os.path.join(currentpath, 'resources')
-
-#relativepath of the github image we will need
-#githubimage_path = "github.png"
-
-#joins relative path to the resource folder
-#gitimagefolder = os.path.join(currentpath, githubimage_path)
-
+terminator = ""
+switch = ""
+confirm_exit = ""
 
 #alarm clock function that accepts parameter to be used to determine if its time yet
-def alarmclock(alarm_set):
+def alarmclock(alarm_set, confirm_exit):
     while True:
         time.sleep(1)
         current_time = datetime.datetime.now()
@@ -30,14 +20,25 @@ def alarmclock(alarm_set):
         print(now)
         
         if now == alarm_set:
-            print("WAKE UP!!")
             winsound.PlaySound("sound.wav", winsound.SND_ASYNC)
             break
 
-#takes input from the User interface and assigns it to a variable that gets passed on to the alarm clock function above
+        elif confirm_exit == "Yes":
+            break
+
+#function that takes input from the User interface and assigns it to a variable that gets passed on to the alarm clock function above
 def actual_time():
     alarm_set = f"{hour.get()}:{min.get()}:{sec.get()}"
     alarmclock(alarm_set)
+
+#function to exit the app
+def closeclockui():
+    clockui.destroy()
+
+
+#function to open a tab in the web browser towards github link
+def openweb():
+    webbrowser.open(giturl)
 
 
 #creates the user interface
@@ -45,49 +46,64 @@ clockui = Tk()
 
 clockui.title("Plutus Alarm Clock V.2")
 clockui.geometry("800x400")
-clockui.configure(background="white")
+#clockui.iconbitmap(image="github.png")
 clockui.resizable(0,0)
 
-#function to exit the app
-def closeclockui():
-    clockui.destroy()
+#external git hub stuff
+giturl = "https://www.github.com/attohx"
+
+#loads and resize github image logo for icon
+gitimage = Image.open("github.png")
+gitimage_resized = gitimage.resize((60,60))
+gitimage2 = ImageTk.PhotoImage(gitimage_resized)
+
+#canvas for the alarm clock
+clockcanvas = Canvas(clockui, width = 800, height = 400, border = 0, highlightthickness = 0)
+clockcanvas.pack(fill = "both", expand = True)
+
+#loads background image
+bgimage = PhotoImage(file= "bgimage.png")
+
+#sets the background image for the clock
+clockcanvas.create_image(0,0, image = bgimage, anchor = 'nw')
+
+#creates labels or text in canvas, made this more optimized than placing them directly in the ui
+clockcanvas.create_text(420,80, text="Insert Time Below In the 24 Hour Format", fill = "darkorchid1", font=("Arial", 16, "bold"))
+clockcanvas.create_text(300,160, text="HOUR", fill = "white", font = ("Arial", 15,"bold"))
+clockcanvas.create_text(420,160, text="MINUTES", fill = "white", font = ("Arial", 15,"bold"))
+clockcanvas.create_text(550,160, text="SECONDS",fill = "white", font = ("Arial", 15,"bold"))
+
+#define buttons for the canvas
+submit = Button(clockui, text = "SET ALARM", fg = "black", width = 20, pady = 5, font = ("Helvetica", "10", "bold"), command = actual_time)
+githublink = Button(clockui, text = "GITHUB", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = openweb )
+closealarm = Button(clockui, text = "EXIT", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = closeclockui )
+stopalarm = Button(clockui, text = "STOP", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = terminator == "On" )
+
+#creates visual or windows for buttons above... better than before imho
+submit_window = clockcanvas.create_window(400,350, window = submit, anchor ="center")
+githublink_window = clockcanvas.create_window(750,350, window = githublink)
+closealarm_window = clockcanvas.create_window(50,350, window = closealarm)
+stopalarm_window = clockcanvas.create_window(750, 300, window = stopalarm)
 
 #variables to be used in the userinterface
 hour = StringVar()
 min = StringVar()
 sec = StringVar()
+placeholder = "00"
 
-#external git hub stuff
-giturl = "https://www.github.com/attohx"
+#defines the entry boxes for input on the user interface
+hourTime = Entry(clockui, textvariable = hour, bg = "white", bd = 0, width = 15)
+minTime = Entry(clockui, textvariable = min, bg = "white", bd = 0,  width = 15)
+secTime = Entry(clockui, textvariable = sec, bg ="white",  bd = 0, width = 15)
 
-#github image logo for icon
-#gitimage = Image.open("github.png")
-#gitimage_resized = gitimage.resize((250,250))
-#gitimage2 = ImageTk.PhotoImage(gitimage_resized)
+#creates the windows for the entry boxes
+hourtime_window = clockcanvas.create_window(300,200, window = hourTime )
+minTime_window = clockcanvas.create_window(420,200, window = minTime)
+secTime_window = clockcanvas.create_window(550,200, window = secTime)
 
-#function to open a tab in the web browser towards github link
-def openweb():
-    webbrowser.open(giturl)
-
-#labels to be printed out on the User Interface
-time_format=Label(clockui, text = "Please Insert Your Time In The 24 Hour Format", fg="darkorchid1", font = "Arial").place(x = 250,y = 270)
-addhr = Label(clockui, text=" Hour", font = 60 ).place(x = 266, y = 160)
-addmin = Label(clockui, text=" Minutes", font = 60 ).place(x = 376, y = 160)
-addsecs = Label(clockui, text=" Seconds", font = 60 ).place(x = 486, y = 160)
-
-setTheAlarm = Label(clockui, text = "Input Time Below", fg = "darkorchid1", relief = "ridge", font = ("Arial", 16, "bold")).place(x = 320,y = 80)
-
-#accepts user input on the user interface
-hourTime = Entry(clockui, textvariable = hour, bg = "white", bd = 2 , width = 10,).place(x = 270,y = 200)
-minTime = Entry(clockui, textvariable = min, bg = "white", bd = 2,  width = 10).place(x = 380, y = 200)
-secTime = Entry(clockui, textvariable = sec, bg ="white",  bd = 2, width = 10).place(x = 490, y = 200)
-
-#buttons of the user interface
-submit = Button(clockui, text = "Activate Alarm", fg = "black", width = 20, pady = 5, font = ("Helvetica", "10", "bold"), command = actual_time).place(x = 330, y = 350)
-
-githublink = Button(clockui, text = "Github", font = ("Helvetica", "10", "bold"), fg = "black", width = 10, pady = 5, command = openweb ).place(x = 650, y = 350)
-
-closealarm = Button(clockui, text = "Exit App", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = closeclockui ).place(x = 50, y = 350)
-
+#creates the placeholder text for the entry boxes
+hourTime.insert(0, placeholder)
+minTime.insert(0, placeholder)
+secTime.insert(0, placeholder)
 
 clockui.mainloop()
