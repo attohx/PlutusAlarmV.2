@@ -7,12 +7,9 @@ import time
 import winsound
 import webbrowser
 
-terminator = ""
-switch = ""
-confirm_exit = ""
 
 #alarm clock function that accepts parameter to be used to determine if its time yet
-def alarmclock(alarm_set, confirm_exit):
+def alarmclock(alarm_set):
     while True:
         time.sleep(1)
         current_time = datetime.datetime.now()
@@ -23,8 +20,7 @@ def alarmclock(alarm_set, confirm_exit):
             winsound.PlaySound("sound.wav", winsound.SND_ASYNC)
             break
 
-        elif confirm_exit == "Yes":
-            break
+    
 
 #function that takes input from the User interface and assigns it to a variable that gets passed on to the alarm clock function above
 def actual_time():
@@ -46,7 +42,6 @@ clockui = Tk()
 
 clockui.title("Plutus Alarm Clock V.2")
 clockui.geometry("800x400")
-#clockui.iconbitmap(image="github.png")
 clockui.resizable(0,0)
 
 #external git hub stuff
@@ -77,13 +72,11 @@ clockcanvas.create_text(550,160, text="SECONDS",fill = "white", font = ("Arial",
 submit = Button(clockui, text = "SET ALARM", fg = "black", width = 20, pady = 5, font = ("Helvetica", "10", "bold"), command = actual_time)
 githublink = Button(clockui, text = "GITHUB", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = openweb )
 closealarm = Button(clockui, text = "EXIT", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = closeclockui )
-stopalarm = Button(clockui, text = "STOP", fg = "black", width = 10, pady = 5, font = ("Helvetica", "10", "bold"), command = terminator == "On" )
 
 #creates visual or windows for buttons above... better than before imho
 submit_window = clockcanvas.create_window(400,350, window = submit, anchor ="center")
 githublink_window = clockcanvas.create_window(750,350, window = githublink)
 closealarm_window = clockcanvas.create_window(50,350, window = closealarm)
-stopalarm_window = clockcanvas.create_window(750, 300, window = stopalarm)
 
 #variables to be used in the userinterface
 hour = StringVar()
